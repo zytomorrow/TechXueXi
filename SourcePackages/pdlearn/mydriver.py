@@ -139,7 +139,7 @@ class Mydriver:
             print("1. 是否存在./chrome/chromedriver.exe 或 PATH 中是否存在 chromedriver.exe")
             print(
                 "2. 浏览器地址栏输入 chrome://version 看到的chrome版本 和 运行 chromedriver.exe 显示的版本整数部分是否相同")
-            print("针对上述问题，请在 http://npm.taobao.org/mirrors/chromedriver 下载对应版本程序并放在合适的位置")
+            print("针对上述问题，请在 https://registry.npmmirror.com/binary.html?path=chromedriver/ 下载对应版本程序并放在合适的位置")
             print("3. 如不是以上问题，请提issue，附上报错信息和您的环境信息")
             print("=" * 60)
             auto.prompt("按回车键继续......")
@@ -170,8 +170,9 @@ class Mydriver:
             print("当前网络缓慢...")
         else:
             self.driver.execute_script('arguments[0].remove()', remover)
+            #修改了适配新版本的二维码的滚动位置 
             self.driver.execute_script(
-                'window.scrollTo(document.body.scrollWidth/2 - 200 , 0)')
+                'window.scrollTo(document.body.scrollWidth/2 - 200 , 400)')
         qrurl = ''
         qcbase64 = ''
         # 取出iframe中二维码，并发往钉钉

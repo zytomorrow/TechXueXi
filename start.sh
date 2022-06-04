@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 update() {
 
     echo "检查更新"
@@ -37,16 +36,17 @@ LOG_SUFFIX=$(date +"%Y-%m-%d--%H-%M-%S")
 
 if [ "${Pushmode}" = "2" ]; then
     echo "当前模式为 Wechat 模式，即将启动守护 --  xuexiwechat"
-    # : > /xuexi/user/wechat_listener.log
-    # sleep 1
-    # supervisord -c /xuexi/user/supervisord.conf
-    # sleep 1
-    # supervisorctl start xuexiwechat
-    # if [ $? -ne 0 ]; then
-    #     echo "守护进程启动失败，切换备用方式"
+    : > /xuexi/user/wechat_listener.log
+    sleep 1
+    ./supervisor.sh 2>&1 & #修复Error:could not find config file /xuexi/user/supervisord.conf的问题
+    supervisord -c /xuexi/user/supervisord.conf
+    sleep 1
+    supervisorctl start xuexiwechat
+    if [ $? -ne 0 ]; then
+        echo "守护进程启动失败，切换备用方式"
         nohup /usr/local/bin/python /xuexi/wechatListener.py >> /xuexi/user/wechat_listener.log 2>&1 &
-    # fi
-    # tail -f /xuexi/user/wechat_listener.log &
+    fi
+    tail -f /xuexi/user/wechat_listener.log &
 fi
 
 
@@ -54,6 +54,7 @@ if [ "${Pushmode}" = "5" ]; then
     echo "当前模式为 Telegram 模式，即将启动守护 --  xuexitg"
     : > /xuexi/user/tg_listener.log
     sleep 1
+    ./supervisor.sh 2>&1 & #修复Error:could not find config file /xuexi/user/supervisord.conf的问题
     supervisord -c /xuexi/user/supervisord.conf
     if [ $? -ne 0 ]; then
         echo "守护进程启动失败，切换备用方式"
@@ -69,6 +70,7 @@ if [ "${Pushmode}" = "6" ]; then
     echo "当前模式为 WEB网页控制台 模式，即将启动守护 --  xuexiweb"
     : > /xuexi/user/web_listener.log
     sleep 1
+    ./supervisor.sh 2>&1 & #修复Error:could not find config file /xuexi/user/supervisord.conf的问题
     supervisord -c /xuexi/user/supervisord.conf
     sleep 1
     supervisorctl start xuexiweb
